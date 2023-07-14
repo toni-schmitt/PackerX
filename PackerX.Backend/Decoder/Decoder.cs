@@ -1,4 +1,6 @@
-﻿using PackerX.Backend.TranscodingContexts;
+﻿using Dawn;
+using PackerX.Backend.Extensions;
+using PackerX.Backend.TranscodingContexts;
 
 namespace PackerX.Backend.Decoder;
 
@@ -9,7 +11,7 @@ public class Decoder : IDecoder
     private readonly BinaryReader _originalBinaryReader;
     private readonly FileStream _originalFileStream;
 
-    public Decoder(
+    private Decoder(
         FileSystemInfo originalFileInfo,
         FileSystemInfo decodedFileInfo
     )
@@ -73,6 +75,29 @@ public class Decoder : IDecoder
         );
     }
 
+    public static Decoder Create(
+        FileSystemInfo originalFileInfo,
+        FileSystemInfo decodedFileInfo
+    )
+    {
+        Guard.Argument(
+                originalFileInfo
+            )
+            .NotNull()
+            .FileExists();
+
+        Guard.Argument(
+                decodedFileInfo
+            )
+            .NotNull()
+            .ValidPath();
+
+        return new Decoder(
+            originalFileInfo,
+            decodedFileInfo
+        );
+    }
+
     private void WriteSection(DecodingContext sameByteContext)
     {
         byte[] toWrite = sameByteContext.IsEncodedSection switch
@@ -87,6 +112,11 @@ public class Decoder : IDecoder
                 sameByteContext.FirstByte
             }
         };
+
+        if (toWrite.Length >= byte.MaxValue)
+        {
+            throw new InvalidOperationException();
+        }
 
         _decodedBinaryWriter.Write(
             toWrite

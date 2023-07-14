@@ -1,4 +1,6 @@
-﻿using PackerX.Backend.TranscodingContexts;
+﻿using Dawn;
+using PackerX.Backend.Extensions;
+using PackerX.Backend.TranscodingContexts;
 
 namespace PackerX.Backend.Encoder;
 
@@ -9,23 +11,21 @@ public class Encoder : IEncoder
     private readonly BinaryReader _originalBinaryReader;
     private readonly FileStream _originalFileStream;
 
-    public Encoder(
+    private Encoder(
         FileSystemInfo originalFileInfo,
         FileSystemInfo encodedFileInfo
     )
     {
-        _originalFileStream = File.Open(
-            originalFileInfo.FullName,
-            FileMode.Open
+        _originalFileStream = File.OpenRead(
+            originalFileInfo.FullName
         );
 
         _originalBinaryReader = new BinaryReader(
             _originalFileStream
         );
 
-        _encodedFileStream = File.Open(
-            encodedFileInfo.FullName,
-            FileMode.Create
+        _encodedFileStream = File.OpenWrite(
+            encodedFileInfo.FullName
         );
 
         _encodedBinaryWriter = new BinaryWriter(
@@ -94,13 +94,36 @@ public class Encoder : IEncoder
 
     public void Dispose()
     {
-        _originalFileStream.Dispose();
         _originalBinaryReader.Dispose();
-        _encodedFileStream.Dispose();
+        _originalFileStream.Dispose();
         _encodedBinaryWriter.Dispose();
+        _encodedFileStream.Dispose();
 
         GC.SuppressFinalize(
             this
+        );
+    }
+
+    public static Encoder Create(
+        FileSystemInfo originalFileInfo,
+        FileSystemInfo encodedFileInfo
+    )
+    {
+        Guard.Argument(
+                originalFileInfo
+            )
+            .NotNull()
+            .FileExists();
+
+        Guard.Argument(
+                encodedFileInfo
+            )
+            .NotNull()
+            .ValidPath();
+
+        return new Encoder(
+            originalFileInfo,
+            encodedFileInfo.AddEncodingExtension()
         );
     }
 
@@ -111,16 +134,25 @@ public class Encoder : IEncoder
 
     private void WriteSection(EncodingContext encodingContext)
     {
-        byte[] toWrite = encodingContext.CanBeEncoded switch
+        if (encodingContext.CanBeEncoded)
         {
-            true => encodingContext.ToEncodedByteArray(
+            _encodedBinaryWriter.Write(
                 Constants.Marker
-            ),
-            false => encodingContext.ToByteArray()
-        };
+            );
+
+            _encodedBinaryWriter.Write(
+                encodingContext.FirstByte
+            );
+
+            _encodedBinaryWriter.Write(
+                encodingContext.SectionLength
+            );
+
+            return;
+        }
 
         _encodedBinaryWriter.Write(
-            toWrite
+            encodingContext.ToByteArray()
         );
     }
 }

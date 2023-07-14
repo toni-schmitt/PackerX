@@ -13,13 +13,16 @@ public class DecodingContext : TranscodingContext
     {
         FirstByte = SectionContextReader.ReadByte();
 
-        SectionLength = FirstByte switch
+        // ReSharper disable once InvertIf - this is intended
+        if (FirstByte is Constants.Marker)
         {
-            Constants.Marker => SectionContextReader.ReadInt32(),
-            _ => 1
-        };
+            IsEncodedSection = true;
+            FirstByte = SectionContextReader.ReadByte();
+            SectionLength = SectionContextReader.ReadInt32();
+        }
 
-        return SectionContextReader.BaseStream.Position == OriginalFileLength
+        return SectionContextReader.BaseStream.Position
+               == OriginalFileLength
             ? TranscodingContextResult.EndOfFile
             : TranscodingContextResult.EndOfSection;
     }
