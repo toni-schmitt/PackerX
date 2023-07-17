@@ -4,7 +4,7 @@ public static class FileSystemInfoExtensions
 {
     public static FileSystemInfo AddEncodingExtension(
         this FileSystemInfo fileSystemInfo,
-        string encodingExtension = ".ttpack"
+        string encodingExtension = Constants.EncodingFileExtension
     )
     {
         if (fileSystemInfo.Extension == encodingExtension)
