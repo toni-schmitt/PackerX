@@ -14,7 +14,8 @@ public static class DawnGuardExtensions
         {
             throw Guard.Fail(
                 new FileNotFoundException(
-                    message
+                    message,
+                    argument.Value.FullName
                 )
             );
         }
@@ -27,6 +28,8 @@ public static class DawnGuardExtensions
         string? message = null
     )
     {
+        message ??= $"Path {argument.Value.FullName} is not a valid path";
+
         try
         {
             Path.GetFullPath(
@@ -63,7 +66,7 @@ public static class DawnGuardExtensions
         catch (PathTooLongException exception)
         {
             throw Guard.Fail(
-                new InvalidCastException(
+                new InvalidPathException(
                     message,
                     exception
                 )
