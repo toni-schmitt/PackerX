@@ -8,7 +8,7 @@ public static class TestData
     private static readonly string? s_baseDirectory = GetBaseDirectory();
 
     private static readonly string s_testFilesDirectory =
-        $"{s_baseDirectory}\\TestFiles";
+        @$"{s_baseDirectory}\TestFiles";
 
     public static readonly string OriginalFileName =
         @$"{s_testFilesDirectory}\org-file";
@@ -60,7 +60,7 @@ public static class TestData
     public static class ErrorTestData
     {
 
-        public const string InvalidFileName = "SL:KDJFSDF:LKSDJFSDF";
+        public const string InvalidFileName = @"SL:KDJFSDF:LKSDJFSDF";
 
         public static readonly string NonExistentFileName =
             @"X:\this\path\does\not\exists";
