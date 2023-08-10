@@ -1,4 +1,3 @@
-using PackerX.Backend.UnitTests.Encoder;
 using Xunit;
 using Xunit.Categories;
 
@@ -13,7 +12,7 @@ public class DecoderTests
         // Arrange
         Backend.Decoder.Decoder decoder = Backend.Decoder.Decoder.Create(
             new FileInfo(
-                TestData.EncodedTestData.ExpectedEncodedFileName
+                TestData.DecodedTestData.EncodedFileName
             ),
             new FileInfo(
                 TestData.DecodedTestData.ActualDecodedFileName

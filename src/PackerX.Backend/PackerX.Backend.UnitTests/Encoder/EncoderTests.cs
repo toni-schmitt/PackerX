@@ -6,15 +6,13 @@ namespace PackerX.Backend.UnitTests.Encoder;
 [UnitTest]
 public class EncoderTests
 {
+
+
     [Theory]
     [TestCase]
-    [InlineData(
-        TestData.ErrorTestData.NonExistentFileName,
-        "x"
-    )]
-    [InlineData(
-        TestData.OriginalFileName,
-        TestData.ErrorTestData.InvalidFileName
+    [MemberData(
+        nameof(TestData.ErrorTestData.InvalidPathsTestData),
+        MemberType = typeof(TestData.ErrorTestData)
     )]
     public void Create_Must_Throw_On_Invalid_Paths(
             string originalFilePath,
@@ -37,7 +35,7 @@ public class EncoderTests
     public void Encode_Produces_Valid_File()
     {
         // Arrange
-        using Backend.Encoder.Encoder encoder = Backend.Encoder.Encoder.Create(
+        Backend.Encoder.Encoder encoder = Backend.Encoder.Encoder.Create(
             new FileInfo(
                 TestData.OriginalFileName
             ),
