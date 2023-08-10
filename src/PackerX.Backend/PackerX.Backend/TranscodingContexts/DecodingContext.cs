@@ -7,7 +7,7 @@ public class DecodingContext : TranscodingContext
         binaryReader
     ) {}
 
-    public bool IsEncodedSection { get; private set; } = false;
+    public bool IsEncodedSection { get; private set; }
 
     public override TranscodingContextResult ReadSection()
     {
