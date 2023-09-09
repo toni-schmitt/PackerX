@@ -1,8 +1,7 @@
-using PackerX.Backend.UnitTests.Encoder;
 using Xunit;
 using Xunit.Categories;
 
-namespace PackerX.Backend.UnitTests.Decoder;
+namespace PackerX.Backend.UnitTests.UnitTests.Decoder;
 
 public class DecoderTests
 {
@@ -13,10 +12,10 @@ public class DecoderTests
         // Arrange
         Backend.Decoder.Decoder decoder = Backend.Decoder.Decoder.Create(
             new FileInfo(
-                TestData.EncodedTestData.ExpectedEncodedFileName
+                TestData.TestData.DecodedTestData.EncodedFileName
             ),
             new FileInfo(
-                TestData.DecodedTestData.ActualDecodedFileName
+                TestData.TestData.DecodedTestData.ActualDecodedFileName
             )
         );
 
@@ -27,11 +26,11 @@ public class DecoderTests
 
         // Assert
         byte[] expected = File.ReadAllBytes(
-            TestData.OriginalFileName
+            TestData.TestData.OriginalFileName
         );
 
         byte[] actual = File.ReadAllBytes(
-            TestData.DecodedTestData.ActualDecodedFileName
+            TestData.TestData.DecodedTestData.ActualDecodedFileName
         );
 
         Assert.Equal(
