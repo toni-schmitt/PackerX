@@ -478,4 +478,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # Unit Tests Test Files
-*\TestFiles\**
+**/*UnitTests/TestData/TestFiles/**

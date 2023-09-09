@@ -1,7 +1,7 @@
 ﻿using Xunit;
 using Xunit.Categories;
 
-namespace PackerX.Backend.UnitTests.Encoder;
+namespace PackerX.Backend.UnitTests.UnitTests.Encoder;
 
 [UnitTest]
 public class EncoderTests
@@ -11,8 +11,8 @@ public class EncoderTests
     [Theory]
     [TestCase]
     [MemberData(
-        nameof(TestData.ErrorTestData.InvalidPathsTestData),
-        MemberType = typeof(TestData.ErrorTestData)
+        nameof(TestData.TestData.ErrorTestData.InvalidPathsTestData),
+        MemberType = typeof(TestData.TestData.ErrorTestData)
     )]
     public void Create_Must_Throw_On_Invalid_Paths(
             string originalFilePath,
@@ -37,10 +37,10 @@ public class EncoderTests
         // Arrange
         Backend.Encoder.Encoder encoder = Backend.Encoder.Encoder.Create(
             new FileInfo(
-                TestData.OriginalFileName
+                TestData.TestData.OriginalFileName
             ),
             new FileInfo(
-                TestData.EncodedTestData.ActualEncodedFileName
+                TestData.TestData.EncodedTestData.ActualEncodedFileName
             )
         );
 
@@ -51,11 +51,11 @@ public class EncoderTests
 
         // Assert
         byte[] expectedFileOutput = File.ReadAllBytes(
-            TestData.EncodedTestData.ExpectedEncodedFileName
+            TestData.TestData.EncodedTestData.ExpectedEncodedFileName
         );
 
         byte[] actualFileOutput = File.ReadAllBytes(
-            TestData.EncodedTestData.ActualEncodedFileName
+            TestData.TestData.EncodedTestData.ActualEncodedFileName
         );
 
         Assert.Equal(

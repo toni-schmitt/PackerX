@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace PackerX.Backend.UnitTests;
+namespace PackerX.Backend.UnitTests.TestData;
 
 public static class TestData
 {
@@ -10,7 +10,7 @@ public static class TestData
     private static readonly string s_testFilesDirectory =
         Path.Join(
             s_baseDirectory,
-            "TestFiles"
+            "TestData\\TestFiles"
         );
 
     public static readonly string OriginalFileName = Path.Join(
@@ -85,7 +85,7 @@ public static class TestData
 
         public const string InvalidFileName = "SL:KDJFSDF:LKSDJFSDF";
 
-        public static readonly string NonExistentFileName =
+        public const string NonExistentFileName =
             @"X:\this\path\does\not\exists";
 
         public static IEnumerable<object[]> InvalidPathsTestData => new[]
